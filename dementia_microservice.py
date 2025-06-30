@@ -129,6 +129,10 @@ class AnalysisResult(BaseModel):
 pipeline = None
 BASE_AUDIO_URL = "https://demantia-backendv2-dev.onrender.com/api/test-responses/audio"
 
+# 🎯 Production Configuration
+PRODUCTION_MODE = os.environ.get("PRODUCTION_MODE", "lite").lower()  # "full" or "lite"
+print(f"🚀 Starting microservice in {PRODUCTION_MODE.upper()} mode")
+
 def calculate_risk_level(predicted_class: str, confidence: float) -> str:
     """Risk seviyesi hesapla"""
     if predicted_class == "normal":
@@ -217,7 +221,7 @@ def initialize_pipeline():
 async def startup_event():
     """Uygulama başlarken çalışır"""
     try:
-        initialize_pipeline()
+        await setup_pipeline()
         print("🚀 Demans Analizi Mikroservisi başlatıldı")
     except Exception as e:
         print(f"❌ Başlatma hatası: {e}")
@@ -668,6 +672,74 @@ async def analyze_audio_sync(request: AnalysisRequest):
             status_code=500,
             detail=f"Analiz hatası: {str(e)}"
         )
+
+async def setup_pipeline():
+    """Initialize pipeline on startup"""
+    global pipeline
+    try:
+        # Import the appropriate feature extractor
+        if PRODUCTION_MODE == "lite":
+            try:
+                from feature_extraction_lite import LightweightFeatureExtractor
+                feature_extractor = LightweightFeatureExtractor()
+                # Create a mock pipeline for compatibility
+                class LitePipeline:
+                    def __init__(self, extractor):
+                        self.extractor = extractor
+                        self.model = self.load_trained_model()
+                        
+                    def load_trained_model(self):
+                        """Load the trained model"""
+                        try:
+                            import joblib
+                            model_path = "full_synthetic_dataset/trained_models/best_model_randomforest.pkl"
+                            return joblib.load(model_path)
+                        except Exception as e:
+                            print(f"❌ Model loading failed: {e}")
+                            return None
+                    
+                    def predict_with_lite_model(self, audio_file):
+                        """Predict using lightweight features"""
+                        try:
+                            # Extract features
+                            features = self.extractor.extract_all_features(audio_file)
+                            
+                            # Convert to DataFrame
+                            import pandas as pd
+                            features_df = pd.DataFrame([features])
+                            
+                            # Select numerical features only
+                            numerical_features = features_df.select_dtypes(include=[np.number])
+                            
+                            # Make prediction
+                            if self.model:
+                                probabilities = self.model.predict_proba(numerical_features)[0]
+                                predicted_class_idx = np.argmax(probabilities)
+                                classes = ['dementia', 'mci', 'normal']
+                                predicted_class = classes[predicted_class_idx]
+                                confidence = float(probabilities[predicted_class_idx])
+                                
+                                return predicted_class, confidence
+                            else:
+                                return "normal", 0.5
+                                
+                        except Exception as e:
+                            print(f"❌ Lite prediction failed: {e}")
+                            return "normal", 0.5
+                
+                pipeline = LitePipeline(feature_extractor)
+                print("✅ Using lightweight feature extractor")
+            except ImportError:
+                print("⚠️ Lightweight extractor not found, using standard with fallback")
+                pipeline = DementiaPipeline()
+        else:
+            pipeline = DementiaPipeline()
+            print("✅ Using full feature extraction pipeline")
+            
+        print("🎯 Pipeline setup completed successfully")
+    except Exception as e:
+        print(f"❌ Pipeline setup failed: {e}")
+        pipeline = None
 
 if __name__ == "__main__":
     import uvicorn
