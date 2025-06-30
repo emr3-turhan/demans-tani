@@ -83,17 +83,53 @@ jobs:
           # Pull the latest image
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-          # Run container in background
-          docker run -d -p 8000:8000 --name test-container ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          # Run container in background with environment variables
+          docker run -d -p 8000:8000 --name test-container \
+            -e PORT=8000 \
+            -e PRODUCTION_MODE=lite \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-          # Wait for container to start
+          # Wait and check container status
+          echo "⏳ Waiting for container to start..."
+          sleep 10
+
+          # Check if container is running
+          if ! docker ps | grep -q test-container; then
+            echo "❌ Container failed to start"
+            docker logs test-container
+            exit 1
+          fi
+
+          # Wait more for app initialization
+          echo "⏳ Waiting for app initialization..."
           sleep 30
 
-          # Test health endpoint
-          curl -f http://localhost:8000/health || exit 1
+          # Health check with retry
+          echo "🔍 Testing health endpoint..."
+          for i in {1..5}; do
+            if curl -f http://localhost:8000/health; then
+              echo "✅ Health check passed"
+              break
+            else
+              echo "⚠️ Health check attempt $i failed, retrying..."
+              sleep 10
+            fi
+            if [ $i -eq 5 ]; then
+              echo "❌ Health check failed after 5 attempts"
+              docker logs test-container
+              exit 1
+            fi
+          done
 
           # Test main endpoint
-          curl -f http://localhost:8000/ || exit 1
+          echo "🔍 Testing main endpoint..."
+          curl -f http://localhost:8000/ || {
+            echo "❌ Main endpoint test failed"
+            docker logs test-container
+            exit 1
+          }
+
+          echo "✅ All tests passed!"
 
           # Cleanup
           docker stop test-container
