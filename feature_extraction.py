@@ -202,6 +202,10 @@ class FeatureExtractor(ProductionFeatureExtractor):
     """Alias for backward compatibility"""
     pass
 
+class AudioFeatureExtractor(ProductionFeatureExtractor):
+    """Legacy alias for backward compatibility"""
+    pass
+
 def main():
     """Test the production extractor"""
     extractor = ProductionFeatureExtractor()
