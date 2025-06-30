@@ -1,5 +1,5 @@
 # 🚀 Dementia Analysis Microservice - Production Image
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 # 📋 Metadata
 LABEL name="dementia-microservice" \
@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     libsndfile1 \
     curl \
+    build-essential \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -23,14 +24,15 @@ WORKDIR /app
 # 📦 Copy requirements first (for Docker cache optimization)
 COPY requirements.txt .
 
-# 🐍 Install Python dependencies
+# 🐍 Install Python dependencies with more verbose output
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir --verbose -r requirements.txt
 
 # 📂 Copy application files
 COPY dementia_microservice.py .
 COPY dementia_detection_pipeline.py .
 COPY feature_extraction.py .
+COPY feature_extraction_lite.py .
 COPY audio_converter.py .
 COPY my_config.json .
 
@@ -43,7 +45,8 @@ import os, sys; \
 required_files = [ \
     'full_synthetic_dataset/trained_models/best_model_randomforest.pkl', \
     'dementia_microservice.py', \
-    'dementia_detection_pipeline.py' \
+    'dementia_detection_pipeline.py', \
+    'feature_extraction_lite.py' \
 ]; \
 missing = [f for f in required_files if not os.path.exists(f)]; \
 print('Missing files:', missing) if missing else print('All required files present'); \
