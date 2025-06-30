@@ -1,6 +1,6 @@
 # 🧠 Dementia Detection Microservice
 
-[![🐳 Docker Build & Publish](https://github.com/emr3turhan/demans-tani/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/emr3turhan/demans-tani/actions/workflows/docker-publish.yml)
+[![🐳 Docker Build & Publish](https://github.com/emr3-turhan/demans-tani/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/emr3-turhan/demans-tani/actions/workflows/docker-publish.yml)
 [![Docker Hub](https://img.shields.io/docker/pulls/emr3turhan/dementia-microservice)](https://hub.docker.com/r/emr3turhan/dementia-microservice)
 
 AI-powered microservice for dementia detection from speech audio analysis, designed for Spring Boot backend integration.
@@ -38,7 +38,7 @@ The service is configured for one-click deployment on Render.com using the provi
 
 ```bash
 # Clone the repository
-git clone https://github.com/emr3turhan/demans-tani.git
+git clone https://github.com/emr3-turhan/demans-tani.git
 cd demans-tani
 
 # Install dependencies
