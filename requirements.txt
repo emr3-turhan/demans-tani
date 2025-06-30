@@ -1,0 +1,27 @@
+# 🚀 Production Dependencies for Render.com Deployment
+
+# 🎵 Audio Processing
+pydub==0.25.1
+librosa==0.10.2
+
+# 🔢 Data Science & ML
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.5.1
+scipy==1.14.0
+
+# 🌐 Web Framework & HTTP
+fastapi==0.115.0
+uvicorn[standard]==0.31.0
+httpx==0.27.2
+aiofiles==24.1.0
+python-multipart==0.0.12
+
+# 📊 Visualization (required by librosa.display)
+matplotlib==3.8.4
+
+# 🔧 Optional: Heavy ML (not needed for this microservice)
+# torch==2.0.1
+# transformers==4.33.2
+# ffmpeg-python==0.2.0
+# pickle-mixin==1.0.2 

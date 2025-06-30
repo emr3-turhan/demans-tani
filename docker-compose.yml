@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  dementia-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dementia-microservice
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # İsteğe bağlı: model ve logs'u host'ta tutmak için
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "1.0"
+        reservations:
+          memory: 1G
+          cpus: "0.5"
+
+  # İsteğe bağlı: nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: dementia-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - dementia-api
+    restart: unless-stopped
+# Monitoring için opsiyonel
+# prometheus:
+#   image: prom/prometheus
+#   container_name: dementia-prometheus
+#   ports:
+#     - "9090:9090"
+#   volumes:
+#     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#   restart: unless-stopped

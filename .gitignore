@@ -1,0 +1,83 @@
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 🔬 Data Science & ML
+*.pkl
+*.h5
+*.model
+*.joblib
+.ipynb_checkpoints/
+*.csv
+*.json
+*.wav
+*.m4a
+*.mp3
+*.mp4
+
+# 🌐 Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+
+# 🔧 IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 📊 Logs & Temp files
+*.log
+logs/
+temp/
+tmp/
+*.tmp
+
+# 🐳 Docker
+.dockerignore
+
+# 🚀 Deployment
+.vercel/
+.netlify/
+
+# 📱 Local test files
+kayit*.m4a
+kayit*.wav
+test_*.wav
+test_output.wav
+
+# 🔍 Keep important files
+!full_synthetic_dataset/
+!test_synthetic_dataset/
+!requirements.txt
+!Dockerfile
+!render.yaml
+!docker-compose.yml 

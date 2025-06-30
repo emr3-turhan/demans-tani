@@ -1,0 +1,93 @@
+
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Demans Risk Analizi Raporu</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+                .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                          color: white; padding: 30px; border-radius: 15px; text-align: center; }
+                .summary { background: white; padding: 20px; margin: 20px 0; border-radius: 10px; 
+                           box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                .result { margin: 15px 0; padding: 20px; background: white; border-radius: 10px;
+                          box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+                .risk-high { border-left: 5px solid #e74c3c; }
+                .risk-medium { border-left: 5px solid #f39c12; }
+                .risk-low { border-left: 5px solid #27ae60; }
+                .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+                           gap: 15px; margin: 15px 0; }
+                .metric { background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; }
+                .error { color: #e74c3c; background: #fdf2f2; padding: 15px; border-radius: 8px; }
+                h1, h2, h3 { margin-top: 0; }
+                .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
+                .stat-item { text-align: center; margin: 10px; }
+                .stat-number { font-size: 2em; font-weight: bold; color: #667eea; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>🧠 Demans Risk Analizi Raporu</h1>
+                <p>Oluşturulma Zamanı: 2025-06-30 20:34:33</p>
+            </div>
+            
+            <div class="summary">
+                <h2>📊 Genel Özet</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">1</div>
+                        <div>Toplam Dosya</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1</div>
+                        <div>Başarılı Analiz</div>
+                    </div>
+                    <div class="stat-item"><div class="stat-number">1</div><div>Düşük Risk</div></div>
+                </div>
+            </div>
+        
+                    <div class="result risk-duşuk-risk">
+                        <h3>📁 Dosya 1: kayit2.wav</h3>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div>
+                                <h4 style="margin: 0; color: #2c3e50;">Risk Seviyesi: Düşük Risk</h4>
+                                <p style="margin: 5px 0; color: #7f8c8d;">Güven: 70.0% | Risk Skoru: 0/6</p>
+                            </div>
+                        </div>
+                        
+                        <p style="color: #27ae60;">✅ Önemli risk faktörü tespit edilmedi.</p>
+                        
+                        <div class="metrics">
+                            <div class="metric">
+                                <h5>🗣️ Konuşma Hızı</h5>
+                                <p>0.542</p>
+                            </div>
+                            <div class="metric">
+                                <h5>⏸️ Ortalama Duraklama</h5>
+                                <p>0.30s</p>
+                            </div>
+                            <div class="metric">
+                                <h5>🎵 Pitch Varyasyonu</h5>
+                                <p>886.8</p>
+                            </div>
+                            <div class="metric">
+                                <h5>🔊 Ses Varyasyonu</h5>
+                                <p>158.36</p>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 20px;">
+                            📝 <strong>Not:</strong> Bu demo amaçlı basit bir tahmindir. Gerçek kullanım için eğitilmiş model gereklidir.
+                        </p>
+                    </div>
+                    
+            <div class="summary" style="margin-top: 30px;">
+                <h3>⚠️ Önemli Uyarı</h3>
+                <p>Bu analiz sadece araştırma ve geliştirme amaçlıdır. Gerçek tıbbi teşhis için bir sağlık uzmanına başvurun.</p>
+                <p>Sonuçlar, ses dosyalarının kalitesi ve kayıt koşullarından etkilenebilir.</p>
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,59 @@
+# 🚀 Render.com Configuration for Dementia Microservice
+# Infrastructure as Code for automated deployment
+
+services:
+  # 🧠 Dementia Analysis Microservice
+  - type: web
+    name: dementia-microservice
+    runtime: docker
+    repo: https://github.com/YOUR_USERNAME/demans-tani.git
+    region: frankfurt # EU Central - closest to Turkey
+    branch: main
+
+    # 🔧 Build Configuration
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+
+    # 🌐 Network & Scaling
+    plan: starter # starter ($7/month) or professional ($25/month)
+    numInstances: 1
+
+    # 🚪 Port Configuration
+    env: docker
+
+    # ❤️ Health Check
+    healthCheckPath: /health
+
+    # 📊 Environment Variables
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: PORT
+        value: "8000"
+      - key: ENVIRONMENT
+        value: "production"
+      - key: LOG_LEVEL
+        value: "info"
+
+    # 🔄 Auto-Deploy Settings
+    autoDeploy: true
+
+    # 📋 Build Commands (Docker handles these)
+    # buildCommand: # Not needed for Docker
+    # startCommand: # Defined in Dockerfile
+
+    # 💾 Disk Storage
+    disk:
+      name: data
+      mountPath: /tmp
+      sizeGB: 1
+
+# 🌍 Global Settings
+databases: []
+# 📧 Notifications (optional)
+# notifications:
+#   - type: slack
+#     webhook: YOUR_SLACK_WEBHOOK_URL
+#     events:
+#       - deploy_succeeded
+#       - deploy_failed
