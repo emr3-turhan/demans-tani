@@ -1,4 +1,4 @@
-# 🚀 Step 4a: Add pydub first (safest audio package)
+# 🚀 Step 4b: Add soundfile (native audio library)
 fastapi==0.104.1
 uvicorn==0.24.0
 httpx==0.25.2
@@ -10,5 +10,6 @@ pandas==1.5.3
 numpy==1.24.3
 scikit-learn==1.3.2
 
-# Audio Processing - Step 4a: pydub only
-pydub==0.25.1 
+# Audio Processing - Step 4b: pydub + soundfile
+pydub==0.25.1
+soundfile==0.12.1 
