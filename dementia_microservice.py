@@ -266,8 +266,41 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "pipeline_ready": pipeline is not None
+        "pipeline_ready": pipeline is not None,
+        "production_mode": PRODUCTION_MODE,
+        "pipeline_type": type(pipeline).__name__ if pipeline else "None"
     }
+
+@app.get("/debug")
+async def debug_info():
+    """Debug bilgileri"""
+    import os
+    try:
+        model_exists = os.path.exists("full_synthetic_dataset/trained_models/best_model_randomforest.pkl")
+        lite_extractor_available = True
+        try:
+            from feature_extraction_lite import LightweightFeatureExtractor
+        except ImportError:
+            lite_extractor_available = False
+            
+        return {
+            "pipeline_status": "ready" if pipeline else "not_ready",
+            "pipeline_type": type(pipeline).__name__ if pipeline else "None",
+            "production_mode": PRODUCTION_MODE,
+            "model_file_exists": model_exists,
+            "lite_extractor_available": lite_extractor_available,
+            "environment_vars": {
+                "PORT": os.environ.get("PORT"),
+                "PRODUCTION_MODE": os.environ.get("PRODUCTION_MODE")
+            },
+            "working_directory": os.getcwd(),
+            "files_in_root": os.listdir(".") if os.path.exists(".") else []
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "pipeline_status": "error"
+        }
 
 async def download_audio(test_session_id: str, question_id: str) -> Path:
     """
@@ -676,12 +709,17 @@ async def analyze_audio_sync(request: AnalysisRequest):
 async def setup_pipeline():
     """Initialize pipeline on startup"""
     global pipeline
+    print(f"🔧 Setting up pipeline in {PRODUCTION_MODE} mode...")
+    
     try:
         # Import the appropriate feature extractor
         if PRODUCTION_MODE == "lite":
+            print("📦 Attempting to import LightweightFeatureExtractor...")
             try:
                 from feature_extraction_lite import LightweightFeatureExtractor
+                print("✅ LightweightFeatureExtractor imported successfully")
                 feature_extractor = LightweightFeatureExtractor()
+                print("✅ LightweightFeatureExtractor instantiated")
                 # Create a mock pipeline for compatibility
                 class LitePipeline:
                     def __init__(self, extractor):
@@ -767,18 +805,29 @@ async def setup_pipeline():
                                 'features_extracted': 60
                             }
                 
+                print("🔧 Creating LitePipeline instance...")
                 pipeline = LitePipeline(feature_extractor)
                 print("✅ Using lightweight feature extractor")
-            except ImportError:
-                print("⚠️ Lightweight extractor not found, using standard with fallback")
-                pipeline = DementiaPipeline()
+            except ImportError as e:
+                print(f"⚠️ Lightweight extractor import failed: {e}")
+                print("🔄 Falling back to standard pipeline...")
+                from dementia_detection_pipeline import DemantiaDetectionPipeline
+                pipeline = DemantiaDetectionPipeline()
+                print("✅ Standard pipeline loaded as fallback")
         else:
-            pipeline = DementiaPipeline()
+            print("📦 Loading full feature extraction pipeline...")
+            from dementia_detection_pipeline import DemantiaDetectionPipeline
+            pipeline = DemantiaDetectionPipeline()
             print("✅ Using full feature extraction pipeline")
             
         print("🎯 Pipeline setup completed successfully")
+        print(f"🔍 Final pipeline type: {type(pipeline).__name__}")
+        
     except Exception as e:
         print(f"❌ Pipeline setup failed: {e}")
+        print(f"📊 Error type: {type(e).__name__}")
+        import traceback
+        print(f"📋 Traceback: {traceback.format_exc()}")
         pipeline = None
 
 if __name__ == "__main__":
