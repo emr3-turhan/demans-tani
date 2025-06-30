@@ -28,13 +28,26 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --verbose -r requirements.txt
 
-# 📂 Copy minimal application files for testing
-COPY dementia_microservice_minimal.py ./dementia_microservice.py
+# 📂 Copy application files (numba-free version)
+COPY dementia_microservice.py .
+COPY dementia_detection_pipeline.py .
+COPY feature_extraction.py .
+COPY feature_extraction_lite.py .
+COPY audio_converter.py .
+COPY my_config.json .
+
+# 🤖 Copy model and dataset (required for AI functionality)
+COPY full_synthetic_dataset/ ./full_synthetic_dataset/
 
 # ✅ Verify critical files exist
 RUN python -c "\
 import os, sys; \
-required_files = ['dementia_microservice.py']; \
+required_files = [ \
+    'full_synthetic_dataset/trained_models/best_model_randomforest.pkl', \
+    'dementia_microservice.py', \
+    'dementia_detection_pipeline.py', \
+    'feature_extraction_lite.py' \
+]; \
 missing = [f for f in required_files if not os.path.exists(f)]; \
 print('Missing files:', missing) if missing else print('All required files present'); \
 sys.exit(1) if missing else None \
