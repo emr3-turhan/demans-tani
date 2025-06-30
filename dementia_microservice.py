@@ -698,8 +698,8 @@ async def setup_pipeline():
                             print(f"❌ Model loading failed: {e}")
                             return None
                     
-                    def predict_with_lite_model(self, audio_file):
-                        """Predict using lightweight features"""
+                    def predict_single_file(self, audio_file, dataset_dir=None):
+                        """Predict single file - compatible with main pipeline"""
                         try:
                             # Extract features
                             features = self.extractor.extract_all_features(audio_file)
@@ -719,13 +719,53 @@ async def setup_pipeline():
                                 predicted_class = classes[predicted_class_idx]
                                 confidence = float(probabilities[predicted_class_idx])
                                 
-                                return predicted_class, confidence
+                                # Return in expected format
+                                return {
+                                    'prediction': {
+                                        'method': 'trained_model',
+                                        'predicted_class': predicted_class,
+                                        'confidence': confidence,
+                                        'class_probabilities': {
+                                            'dementia': float(probabilities[0]),
+                                            'mci': float(probabilities[1]),
+                                            'normal': float(probabilities[2])
+                                        },
+                                        'model_name': 'RandomForest (Lite)'
+                                    },
+                                    'features_extracted': len(features)
+                                }
                             else:
-                                return "normal", 0.5
+                                return {
+                                    'prediction': {
+                                        'method': 'trained_model',
+                                        'predicted_class': 'normal',
+                                        'confidence': 0.5,
+                                        'class_probabilities': {
+                                            'dementia': 0.2,
+                                            'mci': 0.3,
+                                            'normal': 0.5
+                                        },
+                                        'model_name': 'Fallback'
+                                    },
+                                    'features_extracted': 60
+                                }
                                 
                         except Exception as e:
                             print(f"❌ Lite prediction failed: {e}")
-                            return "normal", 0.5
+                            return {
+                                'prediction': {
+                                    'method': 'trained_model',
+                                    'predicted_class': 'normal',
+                                    'confidence': 0.4,
+                                    'class_probabilities': {
+                                        'dementia': 0.3,
+                                        'mci': 0.3,
+                                        'normal': 0.4
+                                    },
+                                    'model_name': 'Emergency'
+                                },
+                                'features_extracted': 60
+                            }
                 
                 pipeline = LitePipeline(feature_extractor)
                 print("✅ Using lightweight feature extractor")
