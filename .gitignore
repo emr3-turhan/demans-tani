@@ -77,7 +77,11 @@ test_output.wav
 # 🔍 Keep important files
 !full_synthetic_dataset/
 !test_synthetic_dataset/
+!my_config.json
+!render.yaml
 !requirements.txt
 !Dockerfile
-!render.yaml
-!docker-compose.yml 
+!docker-compose.yml
+!full_synthetic_dataset/**/*.pkl
+!full_synthetic_dataset/**/*.json
+!full_synthetic_dataset/**/*.csv 

@@ -1,0 +1,83 @@
+{
+  "creation_date": "2025-06-30T19:41:55.223741",
+  "samples_per_class": 50,
+  "tts_engine": "gtts",
+  "classes": {
+    "normal": {
+      "samples_generated": 50,
+      "config": {
+        "speech_rate": [
+          180,
+          220
+        ],
+        "pause_probability": 0.1,
+        "repetition_probability": 0.0,
+        "hesitation_probability": 0.05,
+        "energy_level": [
+          0.8,
+          1.0
+        ],
+        "pitch_variation": [
+          0.9,
+          1.1
+        ],
+        "description": "Akıcı, düzgün telaffuz, net duraksamalar"
+      }
+    },
+    "mci": {
+      "samples_generated": 50,
+      "config": {
+        "speech_rate": [
+          120,
+          180
+        ],
+        "pause_probability": 0.25,
+        "repetition_probability": 0.1,
+        "hesitation_probability": 0.15,
+        "energy_level": [
+          0.6,
+          0.8
+        ],
+        "pitch_variation": [
+          0.8,
+          1.0
+        ],
+        "description": "Orta derecede duraksamalar, kararsızlık tonu"
+      }
+    },
+    "dementia": {
+      "samples_generated": 50,
+      "config": {
+        "speech_rate": [
+          80,
+          120
+        ],
+        "pause_probability": 0.4,
+        "repetition_probability": 0.25,
+        "hesitation_probability": 0.3,
+        "energy_level": [
+          0.4,
+          0.6
+        ],
+        "pitch_variation": [
+          0.7,
+          0.9
+        ],
+        "description": "Bozuk cümle yapıları, sık tekrar, düşük enerji"
+      }
+    }
+  },
+  "texts_used": [
+    "Bugün sabah kahvaltıda peynir ve zeytin yedim, sonra dışarı çıktım.",
+    "Geçen hafta arkadaşımla sinemaya gittik, çok güzel bir film izledik.",
+    "Yarın market alışverişi yapacağım, ekmek, süt ve meyve almalıyım.",
+    "Akşam yemeğinde tavuk ve pilav yedik, çok lezzetliydi.",
+    "Doktorla randevum saat üçte, hastaneye erken gitmeliyim.",
+    "Kızım beni aradı, torunlarının nasıl olduğunu sordu.",
+    "Bahçede çiçek ekiyorum, güller ve laleler çok güzel açtı.",
+    "Televizyonda haberleri izledim, hava durumuna baktım.",
+    "Komşumla konuştuk, onun kedisi çok sevimli.",
+    "Kitap okumayı seviyorum, özellikle tarihi romanları."
+  ],
+  "total_samples": 150
+}

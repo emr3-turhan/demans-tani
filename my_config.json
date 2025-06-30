@@ -1,0 +1,18 @@
+{
+  "audio_processing": {
+    "sample_rate": 22050,
+    "auto_convert_m4a": true
+  },
+  "feature_extraction": {
+    "mfcc_n_coeffs": 13,
+    "include_spectral": true,
+    "include_pitch": true,
+    "include_temporal": true,
+    "include_rhythm": true
+  },
+  "output": {
+    "save_features": true,
+    "save_predictions": true,
+    "generate_report": true
+  }
+}
