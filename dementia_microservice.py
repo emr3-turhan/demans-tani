@@ -276,22 +276,43 @@ async def download_audio(test_session_id: str, question_id: str) -> Path:
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             print(f"📥 Ses dosyası indiriliyor: {url}")
+            print(f"🔗 Backend API URL: {url}")
+            
             response = await client.get(url)
+            
+            print(f"📊 Response Status: {response.status_code}")
+            print(f"📄 Response Headers: {dict(response.headers)}")
+            
             response.raise_for_status()
+            
+            # Content length kontrolü
+            content_length = len(response.content)
+            print(f"📦 Content Length: {content_length} bytes")
+            
+            if content_length == 0:
+                raise Exception("Empty audio file received from backend")
             
             # Dosyayı kaydet
             async with aiofiles.open(audio_file, 'wb') as f:
                 await f.write(response.content)
             
             print(f"✅ Ses dosyası indirildi: {audio_file}")
+            print(f"📁 File Size: {audio_file.stat().st_size} bytes")
+            
             return audio_file
             
     except httpx.HTTPError as e:
+        print(f"❌ HTTP Error: {e}")
+        print(f"📄 Response Status: {getattr(e.response, 'status_code', 'Unknown')}")
+        print(f"📄 Response Text: {getattr(e.response, 'text', 'Unknown')}")
         raise HTTPException(
             status_code=400,
             detail=f"Ses dosyası indirilemedi: {str(e)}"
         )
     except Exception as e:
+        print(f"❌ Download Error: {e}")
+        print(f"🔗 URL: {url}")
+        print(f"📁 Temp dir: {temp_dir}")
         raise HTTPException(
             status_code=500,
             detail=f"İndirme hatası: {str(e)}"
@@ -641,9 +662,14 @@ async def analyze_audio_sync(request: AnalysisRequest):
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
+    # Render.com için port konfigürasyonu
+    port = int(os.environ.get("PORT", 8000))
+    
     uvicorn.run(
         "dementia_microservice:app",
         host="0.0.0.0",
-        port=8000,
-        reload=True
+        port=port,
+        reload=False  # Production'da reload=False
     ) 
