@@ -133,6 +133,16 @@ BASE_AUDIO_URL = "https://demantia-backendv2-dev.onrender.com/api/test-responses
 PRODUCTION_MODE = os.environ.get("PRODUCTION_MODE", "lite").lower()  # "full" or "lite"
 print(f"🚀 Starting microservice in {PRODUCTION_MODE.upper()} mode")
 
+# 🔧 Force lite mode if numba issues detected
+if PRODUCTION_MODE == "full":
+    print("⚠️ Full mode detected - checking numba compatibility...")
+    try:
+        import numba
+        print("✅ numba available in full mode")
+    except ImportError:
+        print("❌ numba not available - forcing lite mode")
+        PRODUCTION_MODE = "lite"
+
 def calculate_risk_level(predicted_class: str, confidence: float) -> str:
     """Risk seviyesi hesapla"""
     if predicted_class == "normal":
