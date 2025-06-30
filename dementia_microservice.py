@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Demans Analizi FastAPI Mikroservisi
+🧠 Dementia Detection Microservice
+AI-powered microservice for dementia detection from speech analysis
 """
 
 import os
 import tempfile
 import aiofiles
 import httpx
+import time
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -18,6 +20,13 @@ from pydantic import BaseModel
 # Kendi modüllerimiz
 from dementia_detection_pipeline import DemantiaDetectionPipeline
 from feature_extraction import AudioFeatureExtractor
+
+# 🔧 Production fix: Disable numba and librosa caching for Render.com
+os.environ['NUMBA_CACHE_DIR'] = '/tmp'
+os.environ['NUMBA_DISABLE_JIT'] = '1'
+os.environ['NUMBA_DISABLE_PERFORMANCE_WARNINGS'] = '1'
+os.environ['LIBROSA_CACHE_DIR'] = '/tmp'
+os.environ['LIBROSA_CACHE_LEVEL'] = '10'
 
 # FastAPI uygulaması
 app = FastAPI(

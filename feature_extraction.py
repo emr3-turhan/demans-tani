@@ -3,6 +3,14 @@
 Ses dosyalarından demans tespiti için özellik çıkarımı yapan Python scripti
 """
 
+import os
+# 🔧 Production fix: Set environment variables before importing librosa
+os.environ['NUMBA_CACHE_DIR'] = '/tmp'
+os.environ['NUMBA_DISABLE_JIT'] = '1'
+os.environ['NUMBA_DISABLE_PERFORMANCE_WARNINGS'] = '1'
+os.environ['LIBROSA_CACHE_DIR'] = '/tmp'
+os.environ['LIBROSA_CACHE_LEVEL'] = '10'
+
 import numpy as np
 import librosa
 import librosa.display
