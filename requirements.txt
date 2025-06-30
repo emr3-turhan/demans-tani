@@ -1,4 +1,4 @@
-# 🚀 Step 3: Add data science packages
+# 🚀 Step 4a: Add pydub first (safest audio package)
 fastapi==0.104.1
 uvicorn==0.24.0
 httpx==0.25.2
@@ -8,4 +8,7 @@ python-multipart==0.0.6
 # Data Science packages
 pandas==1.5.3
 numpy==1.24.3
-scikit-learn==1.3.2 
+scikit-learn==1.3.2
+
+# Audio Processing - Step 4a: pydub only
+pydub==0.25.1 
